@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  frontend-yolo:
+    container_name: frontend
+    image: jorashid/yolo-frontend:v1.0.6
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend-yolo
+  
+  backend-yolo:
+    container_name: backend
+    image: jorashid/yolo-backend:v1.0.0
+    ports:
+      - 5000:5000
+
