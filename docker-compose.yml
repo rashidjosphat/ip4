@@ -1,16 +1,47 @@
 version: '3.8'
+
 services:
   frontend-yolo:
     container_name: frontend
     image: jorashid/yolo-frontend:v1.0.6
     ports:
-      - 3000:3000
+      - "3000:3000"
     depends_on:
       - backend-yolo
-  
+    networks:
+      - yolo-network
+    volumes:
+      - ./frontend:/app  # Mount your frontend app's code (optional, if you're developing locally)
+
   backend-yolo:
     container_name: backend
     image: jorashid/yolo-backend:v1.0.0
     ports:
-      - 5000:5000
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/yolomy  # Connect to the MongoDB container using the service name
+    depends_on:
+      - mongodb
+    networks:
+      - yolo-network
+    volumes:
+      - ./backend:/app  # Mount your backend app's code (optional, if you're developing locally)
+
+  mongodb:
+    container_name: mongodb
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - yolo-network
+    volumes:
+      - mongodb_data:/data/db  # Mount the MongoDB data to a named volume for persistence
+
+networks:
+  yolo-network:
+    driver: bridge  # Default network driver
+
+volumes:
+  mongodb_data:
+    driver: local  # Use the default local driver to store MongoDB data persistently
 
