@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistenctVolumeClaim
+metadata:
+  name: persistence-volume-claim-yolo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resorces:
+    request:
+      strorage: '0.5Gi'
+  strorageClassName: standard
