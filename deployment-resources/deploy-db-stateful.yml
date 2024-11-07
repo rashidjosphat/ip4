@@ -16,7 +16,8 @@ spec:
       labels:
         app: mongodb
     spec:
-      - name: mongodb
-        image: mongo:latest
-        ports:
-          - containerPort: 80
+      container:
+        - name: mongodb
+          image: mongo:latest
+          ports:
+            - containerPort: 80
