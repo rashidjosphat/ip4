@@ -3,9 +3,9 @@ kind: Service
 metadata:
   name: database-service
 spec:
-  clusterIP: None
+  clusterIP: None  # Headless service for StatefulSet
   selector:
-    app: yolo-database
+    app: mongodb  # This should match the label in your StatefulSet's pod template
   ports:
-    - port: 27017
-      targetPort: 27017
+    - port: 27017  # Exposes port 27017 on the service
+      targetPort: 27017  # Forwards traffic to container's port 27017
