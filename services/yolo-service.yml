@@ -7,8 +7,7 @@ metadata:
     description: this is the yolo service it is used to connect the resorces together'
 spec:
   selector:
-    labels:
-      name: backend-deployment
+    name: backend-deployment
   ports:
     - protocol: TCP
       port: 80

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: StatefulSet
+metadata:
+  labels:
+    name: stateful-db
+  annotations:
+    description: "creating stafull resorce for the mongo db database"
+    
+spec: 
+  selector:
+    labels:
+      app: mongodb
+  
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      - name: mongodb
+        image: mongo:latest
+        ports:
+          - containerPort: 80
