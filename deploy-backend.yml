@@ -1,0 +1,21 @@
+apiVersion: app/v1
+kind: Deploymet
+metadata:
+  labels:
+    name: backend-deployment
+spec:
+  selector:
+    name: backend-container
+  teplate:
+    metadata:
+      labels:
+        name: backend-container
+
+    spec:
+      container:
+        - name: backend-container
+          image: jorashid/yolo-back:v1.0.4
+          ports:
+            - containerPort: 5000
+
+
