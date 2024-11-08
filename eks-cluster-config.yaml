@@ -14,3 +14,8 @@ nodeGroups:
     volumeSize: 20
     ssh:
       allow: true
+    iam:
+      withAddonPolicies:
+        externalDNS: true
+        certManager: true
+        albIngress: true

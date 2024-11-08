@@ -111,6 +111,7 @@ spec:
       - name: mongodb-data
         persistentVolumeClaim:
           claimName: mongodb-data
+      
 ---
 apiVersion: v1
 kind: Service
