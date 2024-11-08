@@ -2,15 +2,33 @@ apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
 
 metadata:
-  name: my-cluster-africa3
+  name: my-cluster-africa6
   region: af-south-1
+
+vpc:
+  id: vpc-015ebcda18332b982
+  subnets:
+    private:
+      af-south-1a: 
+        id: subnet-02ea02b751f69bc80  # Subnet ID in af-south-1a
+      af-south-1b: 
+        id: subnet-0a6b9842ddeedbfda  # Subnet ID in af-south-1b
+      af-south-1c: 
+        id: subnet-05fa87cbf00f8a20b  # Subnet ID in af-south-1c
+    public:
+      af-south-1a: 
+        id: subnet-0de25d4ea26b8e167  # You can optionally define public subnets as well
+      af-south-1b: 
+        id: subnet-059bc8128856b59af
+      af-south-1c: 
+        id: subnet-050e4ea8ff704d4fd
 
 nodeGroups:
   - name: nodegroup1
-    instanceType: t3.small
-    desiredCapacity: 4
-    minSize: 2
-    maxSize: 5
+    instanceType: t3.medium
+    desiredCapacity: 7
+    minSize: 4
+    maxSize: 10
     volumeSize: 20
     ssh:
       allow: true
@@ -18,4 +36,4 @@ nodeGroups:
       withAddonPolicies:
         externalDNS: true
         certManager: true
-        albIngress: true
+        awsLoadBalancerController: true  # This replaces albIngress

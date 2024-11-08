@@ -1,0 +1,103 @@
+#!/bin/bash
+
+# Set AWS region (optional: you can set the region as needed)
+REGION="us-east-1"  # Modify this if necessary
+aws configure set region $REGION
+
+# List all VPCs in the region
+vpcs=$(aws ec2 describe-vpcs --query "Vpcs[*].VpcId" --output text)
+
+# Loop through each VPC and clean it up
+for vpc in $vpcs; do
+    echo "Cleaning up VPC: $vpc"
+
+    # Terminate EC2 instances (if any)
+    instances=$(aws ec2 describe-instances --filters "Name=vpc-id,Values=$vpc" --query "Reservations[*].Instances[*].InstanceId" --output text)
+    if [ ! -z "$instances" ]; then
+        echo "Terminating EC2 instances: $instances"
+        aws ec2 terminate-instances --instance-ids $instances
+        # Optionally, wait for instances to terminate
+        # echo "Waiting for instances to terminate..."
+        # aws ec2 wait instance-terminated --instance-ids $instances
+    else
+        echo "No EC2 instances to terminate."
+    fi
+
+    # Release Elastic IPs (if any)
+    eips=$(aws ec2 describe-addresses --filters "Name=domain,Values=vpc" --query "Addresses[*].AllocationId" --output text)
+    if [ ! -z "$eips" ]; then
+        echo "Releasing Elastic IPs: $eips"
+        for eip in $eips; do
+            aws ec2 disassociate-address --allocation-id $eip
+            aws ec2 release-address --allocation-id $eip
+        done
+    else
+        echo "No Elastic IPs to release."
+    fi
+
+    # Detach and delete Internet Gateway (if any)
+    igw=$(aws ec2 describe-internet-gateways --filters "Name=attachment.vpc-id,Values=$vpc" --query "InternetGateways[*].InternetGatewayId" --output text)
+    if [ ! -z "$igw" ]; then
+        echo "Detaching and deleting Internet Gateway: $igw"
+        # Remove any routes to the IGW
+        route_tables=$(aws ec2 describe-route-tables --filters "Name=vpc-id,Values=$vpc" --query "RouteTables[*].RouteTableId" --output text)
+        for route_table in $route_tables; do
+            aws ec2 delete-route --route-table-id $route_table --destination-cidr-block 0.0.0.0/0
+        done
+        # Detach and delete IGW
+        aws ec2 detach-internet-gateway --internet-gateway-id $igw --vpc-id $vpc
+        aws ec2 delete-internet-gateway --internet-gateway-id $igw
+    else
+        echo "No Internet Gateway to detach and delete."
+    fi
+
+    # Delete NAT Gateways (if any)
+    nat_gateways=$(aws ec2 describe-nat-gateways --filter "Name=vpc-id,Values=$vpc" --query "NatGateways[*].NatGatewayId" --output text)
+    if [ ! -z "$nat_gateways" ]; then
+        echo "Deleting NAT Gateways: $nat_gateways"
+        for nat_gateway in $nat_gateways; do
+            aws ec2 delete-nat-gateway --nat-gateway-id $nat_gateway
+            # Wait for NAT gateway to be deleted
+            echo "Waiting for NAT Gateway to be deleted..."
+            aws ec2 wait nat-gateway-deleted --nat-gateway-ids $nat_gateway
+        done
+    else
+        echo "No NAT Gateways to delete."
+    fi
+
+    # Delete Subnets (if any)
+    subnets=$(aws ec2 describe-subnets --filters "Name=vpc-id,Values=$vpc" --query "Subnets[*].SubnetId" --output text)
+    if [ ! -z "$subnets" ]; then
+        echo "Deleting Subnets: $subnets"
+        for subnet in $subnets; do
+            # Delete any ENIs attached to the subnet
+            enics=$(aws ec2 describe-network-interfaces --filters "Name=subnet-id,Values=$subnet" --query "NetworkInterfaces[*].NetworkInterfaceId" --output text)
+            for eni in $enics; do
+                aws ec2 delete-network-interface --network-interface-id $eni
+            done
+            aws ec2 delete-subnet --subnet-id $subnet
+        done
+    else
+        echo "No Subnets to delete."
+    fi
+
+    # Delete Route Tables (if any)
+    route_tables=$(aws ec2 describe-route-tables --filters "Name=vpc-id,Values=$vpc" --query "RouteTables[*].RouteTableId" --output text)
+    if [ ! -z "$route_tables" ]; then
+        echo "Deleting Route Tables: $route_tables"
+        for route_table in $route_tables; do
+            # Disassociate route table from subnets
+            aws ec2 disassociate-route-table --association-id $(aws ec2 describe-route-tables --route-table-id $route_table --query "RouteTables[*].Associations[*].RouteTableAssociationId" --output text)
+            aws ec2 delete-route-table --route-table-id $route_table
+        done
+    else
+        echo "No Route Tables to delete."
+    fi
+
+    # Delete VPC (if all resources are cleaned up)
+    echo "Deleting VPC: $vpc"
+    aws ec2 delete-vpc --vpc-id $vpc
+
+done
+
+echo "Cleanup process completed."
