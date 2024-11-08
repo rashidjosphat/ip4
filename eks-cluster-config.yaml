@@ -4,6 +4,21 @@ kind: ClusterConfig
 metadata:
   name: my-cluster-africa
   region: af-south-1
+vpc:
+  cidr: "10.0.0.0/16"
+  subnets:
+    private:
+      af-south-1a:
+        cidr: "10.0.1.0/24"
+      af-south-1b:
+        cidr: "10.0.2.0/24"
+    public:
+      af-south-1a:
+        cidr: "10.0.3.0/24"
+      af-south-1b:
+        cidr: "10.0.4.0/24"
+  nat:
+    gateway: Single
 
 nodeGroups:
   - name: nodegroup1
