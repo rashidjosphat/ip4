@@ -1,138 +1,21 @@
-# frontend-deployment.yaml
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
 
-apiVersion: apps/v1
-kind: Deployment
 metadata:
-  name: frontend-yolo
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: frontend-yolo
-  template:
-    metadata:
-      labels:
-        app: frontend-yolo
-    spec:
-      containers:
-      - name: frontend
-        image: jorashid/yolo-frontend:v1.0.6
-        ports:
-        - containerPort: 3000
-        volumeMounts:
-        - name: frontend-volume
-          mountPath: /app
-      volumes:
-      - name: frontend-volume
-        hostPath:
-          path: ./frontend  # Adjust to the correct path on the node
-          type: Directory  # Ensure it matches the type of volume required
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: frontend-yolo
-spec:
-  selector:
-    app: frontend-yolo
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 3000
-  type: LoadBalancer  # Expose to external access
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: backend-yolo
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: backend-yolo
-  template:
-    metadata:
-      labels:
-        app: backend-yolo
-    spec:
-      containers:
-      - name: backend
-        image: jorashid/yolo-backend:v1.0.0
-        ports:
-        - containerPort: 5000
-        env:
-        - name: MONGODB_URI
-          value: "mongodb://mongodb-yolo:27017/yolomy"
-        volumeMounts:
-        - name: backend-volume
-          mountPath: /app
-      volumes:
-      - name: backend-volume
-        hostPath:
-          path: ./backend  # Adjust to the correct path on the node
-          type: Directory  # Ensure it matches the type of volume required
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: backend-yolo
-spec:
-  selector:
-    app: backend-yolo
-  ports:
-    - protocol: TCP
-      port: 5000
-      targetPort: 5000
-  type: ClusterIP  # Internal service
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mongodb-yolo
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: mongodb-yolo
-  template:
-    metadata:
-      labels:
-        app: mongodb-yolo
-    spec:
-      containers:
-      - name: mongodb
-        image: mongo:latest
-        ports:
-        - containerPort: 27017
-        volumeMounts:
-        - name: mongodb-data
-          mountPath: /data/db
-      volumes:
-      - name: mongodb-data
-        persistentVolumeClaim:
-          claimName: mongodb-data
-      
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb-yolo
-spec:
-  selector:
-    app: mongodb-yolo
-  ports:
-    - protocol: TCP
-      port: 27017
-      targetPort: 27017
-  type: ClusterIP  # Internal service
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mongodb-data
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi  # Adjust storage size as needed
+  name: my-cluster-africa3
+  region: af-south-1
+
+nodeGroups:
+  - name: nodegroup1
+    instanceType: t3.small
+    desiredCapacity: 4
+    minSize: 2
+    maxSize: 5
+    volumeSize: 20
+    ssh:
+      allow: true
+    iam:
+      withAddonPolicies:
+        externalDNS: true
+        certManager: true
+        albIngress: true
