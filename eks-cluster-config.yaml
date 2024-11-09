@@ -10,7 +10,7 @@ vpc:
   subnets:
     private:
       af-south-1a: 
-        id: subnet-02ea02b751f69bc80  # Subnet ID in af-south-1a
+        id: subnet-02ea02b751f69bc80 
       af-south-1b: 
         id: subnet-0a6b9842ddeedbfda  # Subnet ID in af-south-1b
       af-south-1c: 
