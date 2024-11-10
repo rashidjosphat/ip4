@@ -4,20 +4,14 @@ metadata:
   name: mongodb-pv
 spec:
   capacity:
-    storage: 5Gi
-  volumeMode: Filesystem
+    storage: 5Gi  # The size of the storage
   accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-storage
-  local:
-    path: /mnt/data/mongodb
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-        - matchExpressions:
-            - key: kubernetes.io/hostname
-              operator: In
-              values:
-                - kind-control-plane # or the name of your kind node
-
+    - ReadWriteOnce  # Only one pod can write to this volume at a time
+  persistentVolumeReclaimPolicy: Retain  # Keep the volume even if the PVC is deleted
+  storageClassName: azure-storage  # The name of your storage class (ensure this matches a valid StorageClass)
+  azureDisk:
+    diskName: mongodb-disk  # A unique name for the disk (make sure this disk exists in your Azure portal)
+    diskURI: "/subscriptions/545a16aa-c03a-48a5-9f59-0311a68ba176/resourceGroups/myGroupResource/providers/Microsoft.Compute/disks/mongodb-disk"  # URI for the existing Azure disk
+    kind: Managed  # The disk type, ensure it is Managed
+    cachingMode: ReadWrite  # Caching for improved read/write operations
+    fsType: ext4  # The file system type for the disk
