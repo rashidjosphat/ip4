@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-yolo
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-yolo
+  template:
+    metadata:
+      labels:
+        app: backend-yolo
+    spec:
+      containers:
+      - name: backend
+        image: jorashid/yolo-backend:v1.0.0
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGODB_URI
+          value: "mongodb://mongodb:27017/yolomy"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"

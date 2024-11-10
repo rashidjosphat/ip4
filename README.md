@@ -97,7 +97,73 @@ After confirming that the PVC is running and successfully bound to the PV, you c
 
     ![mongodb describe output](./images/describe_mongodb.png)
 
+extraNote: you have now move from the finiky part lets now tackle the rest of the resorces 🫣🥲.
 ---
 
 ### Creating the Backend with a Service
+1. now to run the backend run .
+``bash
+    kubectl apply -f ./backend-k8s/deployment.yml
+```
 
+    Note: this too is gona take a while you can go and take a cup of tea while you wait 😄.
+
+after it have finished you can comfirm that it is indeed running by running .
+```bash
+    kubectl get pods
+```
+you should be able to see backend-yolo-<podid> desplayed like this.
+
+
+![pod backend running](./images/podbackend_run.png)
+
+2. now that the backend pod is running you can now run the backend service by running .
+
+```bash
+    kubectl apply -f ./backend-k8s/service.yml
+```
+to confirm that our service is running run .
+
+```bash
+    kubctl get service
+```
+it will output something like this .
+![back end service](./images/backend_service_run.png)
+
+now that the backend service is done lets run the front end.
+
+### deploying the frontend with it service
+now that we are at the last part 😜 run.
+```bash
+    kubectl apply -f ./frontend-k8s/deployment.yml 
+```
+
+and the service 
+```bash
+    kubectl apply -f ./frontend-k8s/deployment.yml 
+```
+confirming is the same as for the backend and will output an almost identical to that of the backend.
+if you see this .
+
+
+![completion](./images/completion.png)
+
+thats means you are good to go 🧑‍🦯‍➡️.
+
+# THE AUTOMATION
+For the people how feel like typing is taking to much like i , i have a solution for you guys i have created a automation 
+python file called automation.py in the main branch .
+## how to run it
+so for automating the whole process run.
+```bash
+    python3 automation.py
+```
+this python file gona do all for you guys
+
+### CONTANT AND COLLABORATION
+If you'd like to collaborate, have questions, or just want to get in touch, feel free to reach out to me!
+
+    - 0798190943
+    - josphat.rashid@student.moringaschool.com
+
+I'm open to collaboration opportunities, feedback, and general inquiries!
