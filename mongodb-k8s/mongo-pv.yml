@@ -9,7 +9,15 @@ spec:
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
-  storageClassName: gp2
-  csi:
-    driver: ebs.csi.aws.com
-    volumeHandle: vol-0678943308d38101c 
+  storageClassName: local-storage
+  local:
+    path: /mnt/data/mongodb
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - kind-control-plane # or the name of your kind node
+
