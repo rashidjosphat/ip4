@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backend-yolo
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: backend-yolo
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: jorashid/yolo-backend:v1.0.0
+        image: jorashid/yolo-backend:v1.0.6
         ports:
         - containerPort: 5000
         env:
@@ -22,8 +22,8 @@ spec:
           value: "mongodb://mongodb:27017/yolomy"
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "250m"
+            memory: "50Mi"
+            cpu: "150m"
           limits:
-            memory: "256Mi"
-            cpu: "500m"
+            memory: "100Mi"
+            cpu: "200m"

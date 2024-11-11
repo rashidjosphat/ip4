@@ -11,7 +11,7 @@ spec:
   storageClassName: azure-storage  # The name of your storage class (ensure this matches a valid StorageClass)
   azureDisk:
     diskName: mongodb-disk  # A unique name for the disk (make sure this disk exists in your Azure portal)
-    diskURI: "/subscriptions/545a16aa-c03a-48a5-9f59-0311a68ba176/resourceGroups/myGroupResource/providers/Microsoft.Compute/disks/mongodb-disk"  # URI for the existing Azure disk
+    diskURI: "/subscriptions/545a16aa-c03a-48a5-9f59-0311a68ba176/resourceGroups/myResourceGroup/providers/Microsoft.Compute/disks/mongodb-disk"  # URI for the existing Azure disk
     kind: Managed  # The disk type, ensure it is Managed
     cachingMode: ReadWrite  # Caching for improved read/write operations
     fsType: ext4  # The file system type for the disk
