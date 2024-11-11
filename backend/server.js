@@ -10,7 +10,7 @@ const productRoute = require('./routes/api/productRoute');
 let mongodb_url = 'mongodb://localhost/';
 let dbName = 'yolomy';
 
-const MONGODB_URI = 'mongodb://mongo-db:27017/yolomy';  // mongo-db is the container name// const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://james_rashid:james_rashid@cluster0.bwtll.mongodb.net/yolomy?retryWrites=true&w=majority&appName=Cluster0'
+const MONGODB_URI = 'mongodb://mongodb-0.mongodb:27017/yolomy';  // mongo-db is the container name// const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://james_rashid:james_rashid@cluster0.bwtll.mongodb.net/yolomy?retryWrites=true&w=majority&appName=Cluster0'
 //const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/yolomy';
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
 let db = mongoose.connection;
