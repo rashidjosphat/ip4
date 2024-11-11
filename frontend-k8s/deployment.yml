@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: jorashid/yolo-frontend:v1.0.7
+        image: jorashid/yolo-frontend:v1.0.9
         ports:
         - containerPort: 3000
         resources:
