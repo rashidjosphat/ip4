@@ -1,6 +1,6 @@
 # YOLO ECOMMERCE APPLICATION
-## access the application through this ip '52.224.84.242'
-### yolomy application: [yolomy-application.com](52.224.84.242)
+## access the application through this ip '172.191.88.77'
+### yolomy application: [yolomy-application.com](172.191.88.77)
 This application is an e-commerce platform that assists users in selling and buying products. Users can sell their products by logging in and adding product details. Once added, the product will be displayed for customers to view and purchase.
 
 ### Product Screenshots
