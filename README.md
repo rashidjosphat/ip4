@@ -102,7 +102,7 @@ extraNote: you have now move from the finiky part lets now tackle the rest of th
 
 ### Creating the Backend with a Service
 1. now to run the backend run .
-``bash
+```bash
     kubectl apply -f ./backend-k8s/deployment.yml
 ```
 
