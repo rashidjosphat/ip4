@@ -1,5 +1,5 @@
-.terraform.lock.hcl
-main.tf
+
+
 READme2.md
 eks-cluster-config.yml
-buildx-v0.8.0.linux-amd64
+
