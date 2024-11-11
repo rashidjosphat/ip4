@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: frontend-yolo
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: frontend-yolo
@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: jorashid/yolo-frontend:v1.0.6
+        image: jorashid/yolo-frontend:v1.0.7
         ports:
         - containerPort: 3000
         resources:
           requests:
-            memory: "64Mi"
-            cpu: "150m"
-          limits:
-            memory: "100Mi"
+            memory: "200Mi"
             cpu: "200m"
+          limits:
+            memory: "300Mi"
+            cpu: "250m"
