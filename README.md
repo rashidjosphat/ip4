@@ -141,7 +141,7 @@ now that we are at the last part 😜 run.
 
 and the service 
 ```bash
-    kubectl apply -f ./frontend-k8s/deployment.yml 
+    kubectl apply -f ./frontend-k8s/service.yml 
 ```
 confirming is the same as for the backend and will output an almost identical to that of the backend.
 if you see this .
